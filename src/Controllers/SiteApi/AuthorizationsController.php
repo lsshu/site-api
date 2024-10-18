@@ -9,24 +9,18 @@ class AuthorizationsController extends Controller
 {
     protected string $guard_name = "site-api";
 
-    public function login()
-    {
-        return $this->errorResponse(401, '授权过期');
-    }
-
     /**
-     * 获取 token
+     * 登录后台 获取 token
      *
      * @param Request $request
      * @return mixed
      */
-    public function store(Request $request)
+    public function login(Request $request)
     {
         $credentials = [];
         $credentials['name'] = $request->name;
         $credentials['password'] = $request->password;
         $credentials['guard_name'] = $this->guard_name;
-
         if (!$token = Auth::guard($this->guard_name)->attempt($credentials)) {
             return $this->errorResponse(401, '用户名或密码错误', 1001);
         }
@@ -58,10 +52,45 @@ class AuthorizationsController extends Controller
         try {
             Auth::guard($this->guard_name)->logout();
         } catch (\Exception $e) {
-            return $this->errorResponse(401, 'token 已过期');
+            return $this->errorResponse(401, 'token 已过期', 1003);
         }
         // 删除成功，返回 204， 没有其他内容返回
         return response()->noContent();
+    }
+
+    /***
+     * 检查登录状态
+     * @return \Illuminate\Http\JsonResponse|object
+     */
+    public function check()
+    {
+        try {
+            $is_login = Auth::guard($this->guard_name)->check();
+        } catch (\Exception $e) {
+            return $this->errorResponse(401, 'token 已过期', 1004);
+        }
+        // 删除成功，返回 204， 没有其他内容返回
+        return response()->json(['code' => 0, 'message' => "success", "data" => [
+            "login" => $is_login
+        ]])->setStatusCode(200);
+    }
+
+    /***
+     * 用户信息
+     * @return \Illuminate\Http\JsonResponse|object
+     */
+    public function user()
+    {
+        try {
+            $user = Auth::guard($this->guard_name)->user();
+        } catch (\Exception $e) {
+            return $this->errorResponse(401, 'token 已过期', 1005);
+        }
+        $user = $user->toArray();
+        unset($user['password']);
+        return response()->json(['code' => 0, 'message' => "success", "data" => [
+            "user" => $user
+        ]])->setStatusCode(200);
     }
 
     /**
@@ -71,7 +100,7 @@ class AuthorizationsController extends Controller
      * @param $name
      * @return mixed
      */
-    public function respondWithToken($token, $name)
+    public function respondWithToken($token, $name = null)
     {
         $expiresIn = Auth::guard($this->guard_name)->factory()->getTTL() * 60;
         return response()->json(['code' => 0, 'message' => "success", "data" => [

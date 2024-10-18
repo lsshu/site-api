@@ -14,22 +14,28 @@ Route::group([
         return ["status" => "success"];
     })->name('test'); // 测试是否安装成功
     // 登录接口
+    Route::group([], function () {
+        // 默认登录 获取 token
+        Route::match(['post', 'put'], 'login', [AuthorizationsController::class, "login"])->name('site-api.login'); // 默认登录
+    });
     Route::group([
+        'middleware' => ['auth:site-api'],// 登录就可以
     ], function () {
-        // 获取 token
-        Route::get('login', [AuthorizationsController::class, "login"])->name('login'); // 默认登录
-        Route::post('login', [AuthorizationsController::class, "store"])->name('login');
+        // 登录信息
+        Route::match(['get', 'post', 'put'], 'user', [AuthorizationsController::class, "user"])->name('site-api.login.user');
         // 刷新 token
-        Route::put('refresh', [AuthorizationsController::class, "refresh"])->name('login.refresh');
+        Route::match(['get', 'post'], 'refresh', [AuthorizationsController::class, "refresh"])->name('site-api.login.refresh');
+        // 检查 token
+        Route::match(['get', 'post'], 'check', [AuthorizationsController::class, "check"])->name('site-api.login.check');
         // 删除 token
-        Route::delete('logout', [AuthorizationsController::class, "destroy"])->name('login.logout');
+        Route::match(['get', 'post', 'delete'], 'logout', [AuthorizationsController::class, "logout"])->name('site-api.login.logout');
     });
 
     Route::group([
         'middleware' => ['auth:site-api'],// 登录就可以
     ], function () {
         /*菜单*/
-        Route::get("menus", [PermissionsController::class, "menus"])->name('site-api.menus');
+        Route::match(['get', 'post'], "menus", [PermissionsController::class, "menus"])->name('site-api.menus');
     });
 
     // 需要 token 验证的接口

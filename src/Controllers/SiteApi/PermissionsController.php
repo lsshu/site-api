@@ -9,6 +9,10 @@ class PermissionsController extends Controller
 {
     protected string $model = Permission::class;
 
+    /***
+     * 获取所有菜单
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function menus()
     {
         $data = $this->model::whereNull("parent_id")->where('is_menu', true)->with('childrenMenus')->get();
