@@ -18,13 +18,13 @@ class AuthorizationsController extends Controller
     public function login(Request $request)
     {
         $credentials = [];
-        $credentials['name'] = $request->name;
+        $credentials['username'] = $request->username;
         $credentials['password'] = $request->password;
         $credentials['guard_name'] = $this->guard_name;
         if (!$token = Auth::guard($this->guard_name)->attempt($credentials)) {
             return $this->errorResponse(401, '用户名或密码错误', 1001);
         }
-        return $this->respondWithToken($token, $credentials['name']);
+        return $this->respondWithToken($token, $credentials['username']);
     }
 
     /**
@@ -70,9 +70,13 @@ class AuthorizationsController extends Controller
             return $this->errorResponse(401, 'token 已过期', 1004);
         }
         // 删除成功，返回 204， 没有其他内容返回
-        return response()->json(['code' => 0, 'message' => "success", "data" => [
-            "login" => $is_login
-        ]])->setStatusCode(200);
+        return response()->json([
+            'success' => true,
+            'code' => 0,
+            'message' => "success",
+            "data" => [
+                "login" => $is_login
+            ]])->setStatusCode(200);
     }
 
     /***
@@ -88,9 +92,13 @@ class AuthorizationsController extends Controller
         }
         $user = $user->toArray();
         unset($user['password']);
-        return response()->json(['code' => 0, 'message' => "success", "data" => [
-            "user" => $user
-        ]])->setStatusCode(200);
+        return response()->json([
+            'success' => true,
+            'code' => 0,
+            'message' => "success",
+            "data" => [
+                "user" => $user
+            ]])->setStatusCode(200);
     }
 
     /**
@@ -103,14 +111,19 @@ class AuthorizationsController extends Controller
     public function respondWithToken($token, $name = null)
     {
         $expiresIn = Auth::guard($this->guard_name)->factory()->getTTL() * 60;
-        return response()->json(['code' => 0, 'message' => "success", "data" => [
-            'accessToken' => $token,
-            'refreshToken' => $token,
-            'tokenType' => 'Bearer',
-            'expiresIn' => $expiresIn,
-            'expires' => date("Y/m/d H:i:s", time() + $expiresIn),
-            'name' => $name,
-            'roles' => ['admin']
-        ]])->setStatusCode(201);
+        $user = Auth::guard($this->guard_name)->user();
+        return response()->json([
+            'success' => true,
+            'code' => 0,
+            'message' => "success",
+            "data" => [
+                'accessToken' => $token,
+                'refreshToken' => $token,
+                'tokenType' => 'Bearer',
+                'expiresIn' => $expiresIn,
+                'expires' => date("Y/m/d H:i:s", time() + $expiresIn),
+                'username' => $user->username,
+                'roles' => ['admin']
+            ]])->setStatusCode(201);
     }
 }

@@ -30,10 +30,12 @@ class CreateRootOrTeamTables extends Migration
             $table->bigIncrements('id'); // root id
             $table->unsignedBigInteger($columnNames['team_foreign_key'])->nullable();
             $table->index($columnNames['team_foreign_key'], 'roots_team_foreign_key_index');
-            $table->string('name');       // For MySQL 8.0 use string('name', 125);
+            $table->string('username');       // For MySQL 8.0 use string('name', 125);
+            $table->string('nickname')->nullable();       // For MySQL 8.0 use string('name', 125);
+            $table->string('avatar')->nullable();       // For MySQL 8.0 use string('name', 125);
             $table->string('password');
             $table->string('guard_name'); // For MySQL 8.0 use string('guard_name', 125);
-            $table->unique(['name', 'guard_name']);
+            $table->unique(['username', 'guard_name']);
             $table->timestamps();
             $table->softDeletes();
         });

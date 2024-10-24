@@ -11,7 +11,7 @@ class Root extends Authenticatable implements JWTSubject
 {
     use HasRoles, SoftDeletes;
 
-    protected $fillable = ['team_id', 'name', 'password', 'guard_name'];
+    protected $fillable = ['team_id', 'username', 'nickname', 'avatar', 'password', 'guard_name'];
 
     public function getTable()
     {
@@ -25,7 +25,52 @@ class Root extends Authenticatable implements JWTSubject
      */
     public function isRoot()
     {
-        return $this->name === 'root';
+        return $this->username === 'root';
+    }
+
+    /***
+     * 生成账号密码
+     * @param $password
+     * @return string
+     */
+    public function getRootPassword($password)
+    {
+        return bcrypt($password);
+    }
+
+    /***
+     * 创建或者更新Root用户
+     * @return mixed
+     */
+    public function initRootUser()
+    {
+        $root_username = config('site-api.root_username', "root");
+        $root_nickname = config('site-api.root_nickname', "Root");
+        $root_password = config('site-api.root_password', "root123456");
+        $root_guard_name = config('site-api.root_guard_name', "site-api");
+        $user = $this->where('username', $root_username)->first();
+//        if ($user) {
+//            $user->nickname = $root_nickname;
+//            $user->password = bcrypt($root_password);
+//            $user->guard_name = $root_guard_name;
+//            return $user->save();
+//        } else {
+//            $this->username = $root_username;
+//            $this->nickname = $root_nickname;
+//            $this->password = bcrypt($root_password);
+//            $this->guard_name = $root_guard_name;
+//            return $this->save();
+//        }
+
+
+        return $this->updateOrCreate([
+            "username" => $root_username
+        ], [
+            "username" => $root_username,
+            "nickname" => $root_nickname,
+            "password" => bcrypt($root_password),
+            "guard_name" => $root_guard_name,
+        ]);
     }
 
     /**
