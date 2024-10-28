@@ -32,8 +32,8 @@ class ServiceProvider extends BaseServiceProvider
         ], 'public');
         $this->publishes([
             __DIR__ . '/../database/migrations/2000_00_00_000000_create_permission_tables.php' => $this->getMigrationFileName('create_permission_tables.php'),
-            __DIR__ . '/../database/migrations/2000_00_00_000001_add_teams_fields.php' => $this->getMigrationFileName('add_teams_fields.php'),
-            __DIR__ . '/../database/migrations/2000_00_00_000002_create_root_or_team_tables.php' => $this->getMigrationFileName('create_root_or_team_tables.php'),
+            __DIR__ . '/../database/migrations/2000_00_00_000001_add_departments_fields.php' => $this->getMigrationFileName('add_teams_fields.php'),
+            __DIR__ . '/../database/migrations/2000_00_00_000002_create_user_or_department_tables.php' => $this->getMigrationFileName('create_root_or_team_tables.php'),
         ], 'migrations');
 
         if ($this->app->runningInConsole()) {

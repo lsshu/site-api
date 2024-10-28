@@ -3,17 +3,17 @@
 namespace Lsshu\Site\Api\Controllers\SiteApi;
 
 use Illuminate\Http\Request;
-use Lsshu\Site\Api\Models\Permission;
+use Lsshu\Site\Api\Models\SystemMenu;
 
-class PermissionsController extends Controller
+class MenuController extends Controller
 {
-    protected string $model = Permission::class;
+    protected string $model = SystemMenu::class;
 
     /***
      * 获取所有菜单
      * @return \Illuminate\Http\JsonResponse
      */
-    public function menus()
+    public function routes()
     {
         $data = $this->model::whereNull("parent_id")->where('is_menu', true)->with('childrenMenus')->get();
         $data = $this->handleMenus($data);

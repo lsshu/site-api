@@ -5,7 +5,7 @@ namespace Lsshu\Site\Api\Models;
 use Spatie\Permission\Models\Permission as SpatiePermission;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Permission extends SpatiePermission
+class SystemMenu extends SpatiePermission
 {
     use SoftDeletes;
 
@@ -20,5 +20,10 @@ class Permission extends SpatiePermission
     public function childrenMenus()
     {
         return $this->children()->where('is_menu', true)->with('childrenMenus');
+    }
+
+    public function getTable()
+    {
+        return config('permission.table_names.menus', parent::getTable());
     }
 }

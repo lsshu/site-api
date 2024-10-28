@@ -22,7 +22,7 @@ return [
          *  `Spatie\Permission\Contracts\Permission` 契约。
          */
 
-        'permission' => Lsshu\Site\Api\Models\Permission::class,
+        'menu' => Lsshu\Site\Api\Models\SystemMenu::class,
 
         /*
          * When using the "HasRoles" trait from this package, we need to know which
@@ -42,9 +42,9 @@ return [
          * `Spatie\Permission\Contracts\Role` 契约。
          */
 
-        'role' => Lsshu\Site\Api\Models\Role::class,
-        'root' => Lsshu\Site\Api\Models\Root::class,
-        'team' => Lsshu\Site\Api\Models\Team::class,
+        'role' => Lsshu\Site\Api\Models\SystemRole::class,
+        'user' => Lsshu\Site\Api\Models\SystemUser::class,
+        'department' => Lsshu\Site\Api\Models\SystemDepartment::class,
 
     ],
 
@@ -61,7 +61,7 @@ return [
          * 我们选择了一个基本的默认值，但您可以轻松将其更改为您喜欢的。
          */
 
-        'roles' => 'site_api_roles',
+        'roles' => 'site_api_system_roles',
 
         /*
          * When using the "HasPermissions" trait from this package, we need to know which
@@ -74,7 +74,7 @@ return [
          * 我们选择了一个基本的默认值，但您可以轻松将其更改为您喜欢的任何表。
          */
 
-        'permissions' => 'site_api_permissions',
+        'menus' => 'site_api_menus',
 
         /*
          * When using the "HasPermissions" trait from this package, we need to know which
@@ -89,7 +89,7 @@ return [
          *
          */
 
-        'model_has_permissions' => 'site_api_model_has_permissions',
+        'model_has_permissions' => 'site_api_system_model_has_permissions',
 
         /*
          * When using the "HasRoles" trait from this package, we need to know which
@@ -103,7 +103,7 @@ return [
          * 我们选择了一个基本的默认值，但您可以轻松将其更改为您喜欢的任何表。
          */
 
-        'model_has_roles' => 'site_api_model_has_roles',
+        'model_has_roles' => 'site_api_system_model_has_roles',
 
         /*
          * When using the "HasRoles" trait from this package, we need to know which
@@ -116,11 +116,11 @@ return [
          * 我们选择了一个基本的默认值，但您可以轻松将其更改为您喜欢的任何表。
          */
 
-        'role_has_permissions' => 'site_api_role_has_permissions',
+        'role_has_permissions' => 'site_api_system_role_has_permissions',
 
-        'roots' => 'site_api_roots',
+        'users' => 'site_api_system_users',
 
-        'teams' => 'site_api_teams',
+        'departments' => 'site_api_system_departments',
 
     ],
 

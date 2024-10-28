@@ -5,7 +5,7 @@ namespace Lsshu\Site\Api\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Lsshu\Site\Api\Models\Permission;
+use Lsshu\Site\Api\Models\SystemMenu;
 
 class SeedPermission extends Command
 {
@@ -71,7 +71,7 @@ class SeedPermission extends Command
                     }
                 }
                 // 获取数据库中的权限
-                $permissions = Permission::select('name')->where('guard_name', $guardName)->get()->pluck('name');
+                $permissions = SystemMenu::select('name')->where('guard_name', $guardName)->get()->pluck('name');
                 // 筛选出不同的权限
                 //$diff = collect(array_keys($values))->diff($permissions);
                 $diff = collect(array_keys($values));
@@ -79,17 +79,17 @@ class SeedPermission extends Command
                     $_item = $values[$item];
                     $_item['guard_name'] = isset($_item['guard_name']) ? $_item['guard_name'] : $guardName;
                     if (isset($_item['parent_name']) && $_item['parent_name']) {
-                        $p = Permission::where(['name' => $_item['parent_name'], 'guard_name' => $_item['guard_name']])->first();
+                        $p = SystemMenu::where(['name' => $_item['parent_name'], 'guard_name' => $_item['guard_name']])->first();
                         if ($p) {
                             $_item['parent_id'] = $p->id;
                         }
                     }
-                    Permission::updateOrCreate(['name' => $_item['name'], 'guard_name' => $_item['guard_name']], $_item);
+                    SystemMenu::updateOrCreate(['name' => $_item['name'], 'guard_name' => $_item['guard_name']], $_item);
                 }
                 // 反向删除
                 $diff2 = collect($permissions)->diff(array_keys($values));
                 foreach ($diff2 as $item) {
-                    Permission::where(['name' => $item, 'guard_name' => $guardName])->delete();
+                    SystemMenu::where(['name' => $item, 'guard_name' => $guardName])->delete();
                 }
             }
         });

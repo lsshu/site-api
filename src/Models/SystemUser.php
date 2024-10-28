@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Root extends Authenticatable implements JWTSubject
+class SystemUser extends Authenticatable implements JWTSubject
 {
     use HasRoles, SoftDeletes;
 
@@ -15,7 +15,7 @@ class Root extends Authenticatable implements JWTSubject
 
     public function getTable()
     {
-        return config('permission.table_names.roots', parent::getTable());
+        return config('permission.table_names.users', parent::getTable());
     }
 
     /**

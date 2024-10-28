@@ -2,24 +2,28 @@
 
 return [
     [
-        "name" => "site-api.authorization",
-        "title" => "后台管理",
+        "name" => "system",
+        "title" => "系统管理",
         "icon" => "",
-        'action' => [['name' => "aaa", "title" => "AAA"]],
+//        'action' => [['name' => "aaa", "title" => "AAA"]],
         "children" => [
             [
-                'name' => 'roots',
-                'title' => '管理员',
-                'action' => [['name' => "abc", "title" => "ABC"]]
+                'name' => 'user',
+                'title' => '用户管理',
+//                'action' => [['name' => "abc", "title" => "ABC"]]
             ],
             [
-                'name' => 'roles',
-                'title' => '角色',
-                'action' => [['name' => "cde", "title" => "CDE"]]
+                'name' => 'role',
+                'title' => '角色管理',
+//                'action' => [['name' => "cde", "title" => "CDE"]]
             ],
             [
-                'name' => 'permissions',
-                'title' => '权限',
+                'name' => 'menu',
+                'title' => '菜单管理',
+            ],
+            [
+                'name' => 'dept',
+                'title' => '部门管理',
             ],
         ]
     ]

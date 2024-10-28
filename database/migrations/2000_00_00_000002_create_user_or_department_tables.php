@@ -17,7 +17,7 @@ class CreateRootOrTeamTables extends Migration
         $tableNames = config('permission.table_names');
         $columnNames = config('permission.column_names');
 
-        Schema::create($tableNames['teams'], function (Blueprint $table) use ($columnNames) {
+        Schema::create($tableNames['departments'], function (Blueprint $table) use ($columnNames) {
             $table->bigIncrements('id'); // role id
             $table->unsignedBigInteger('parent_id')->nullable(); // parent id
             $table->string('name');       // For MySQL 8.0 use string('name', 125);
@@ -49,7 +49,7 @@ class CreateRootOrTeamTables extends Migration
     public function down()
     {
         $tableNames = config('permission.table_names');
-        Schema::drop($tableNames['teams']);
+        Schema::drop($tableNames['departments']);
         Schema::drop($tableNames['roots']);
     }
 }

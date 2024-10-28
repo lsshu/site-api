@@ -25,7 +25,7 @@ class CreatePermissionTables extends Migration
             throw new \Exception('Error: team_foreign_key on config/permission.php not loaded. Run [php artisan config:clear] and try again.');
         }
 
-        Schema::create($tableNames['permissions'], function (Blueprint $table) {
+        Schema::create($tableNames['menus'], function (Blueprint $table) {
             $table->bigIncrements('id'); // permission id
             $table->unsignedBigInteger('parent_id')->nullable(); // parent id
             $table->string('name');       // For MySQL 8.0 use string('name', 125);
@@ -65,7 +65,7 @@ class CreatePermissionTables extends Migration
 
             $table->foreign(PermissionRegistrar::$pivotPermission)
                 ->references('id') // permission id
-                ->on($tableNames['permissions'])
+                ->on($tableNames['menus'])
                 ->onDelete('cascade');
             if ($teams) {
                 $table->unsignedBigInteger($columnNames['team_foreign_key']);
@@ -109,7 +109,7 @@ class CreatePermissionTables extends Migration
 
             $table->foreign(PermissionRegistrar::$pivotPermission)
                 ->references('id') // permission id
-                ->on($tableNames['permissions'])
+                ->on($tableNames['menus'])
                 ->onDelete('cascade');
 
             $table->foreign(PermissionRegistrar::$pivotRole)
@@ -142,6 +142,6 @@ class CreatePermissionTables extends Migration
         Schema::drop($tableNames['model_has_roles']);
         Schema::drop($tableNames['model_has_permissions']);
         Schema::drop($tableNames['roles']);
-        Schema::drop($tableNames['permissions']);
+        Schema::drop($tableNames['menus']);
     }
 }

@@ -5,7 +5,7 @@ namespace Lsshu\Site\Api\Controllers\SiteApi;
 use Illuminate\Http\Request;
 use Lsshu\Site\Api\Models\Root;
 
-class RootsController extends Controller
+class UserController extends Controller
 {
     protected string $model = Root::class;
 

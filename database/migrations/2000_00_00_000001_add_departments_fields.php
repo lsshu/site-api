@@ -15,11 +15,11 @@ class AddTeamsFields extends Migration
      */
     public function up()
     {
-        $teams = config('permission.teams');
+        $departments = config('permission.departments');
         $tableNames = config('permission.table_names');
         $columnNames = config('permission.column_names');
 
-        if (! $teams) {
+        if (! $departments) {
             return;
         }
         if (empty($tableNames)) {
@@ -53,7 +53,7 @@ class AddTeamsFields extends Migration
                     'model_has_permissions_permission_model_type_primary');
                 if (DB::getDriverName() !== 'sqlite') {
                     $table->foreign(PermissionRegistrar::$pivotPermission)
-                        ->references('id')->on($tableNames['permissions'])->onDelete('cascade');
+                        ->references('id')->on($tableNames['menus'])->onDelete('cascade');
                 }
             });
         }

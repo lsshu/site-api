@@ -132,6 +132,7 @@ class Controller extends BaseController
     protected function response($data = null, $statusCode = 200, $message = "success", $code = 0)
     {
         return response()->json([
+            'success' => true,
             'code' => $code,
             'message' => $message,
             'data' => $data
