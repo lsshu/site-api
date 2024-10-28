@@ -22,7 +22,7 @@ return [
          *  `Spatie\Permission\Contracts\Permission` 契约。
          */
 
-        'menu' => Lsshu\Site\Api\Models\SystemMenu::class,
+        'permission' => Lsshu\Site\Api\Models\SystemMenu::class,
 
         /*
          * When using the "HasRoles" trait from this package, we need to know which
@@ -74,7 +74,7 @@ return [
          * 我们选择了一个基本的默认值，但您可以轻松将其更改为您喜欢的任何表。
          */
 
-        'menus' => 'site_api_menus',
+        'permissions' => 'site_api_system_permissions',
 
         /*
          * When using the "HasPermissions" trait from this package, we need to know which

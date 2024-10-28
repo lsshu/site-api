@@ -6,7 +6,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Spatie\Permission\PermissionRegistrar;
 
-class AddTeamsFields extends Migration
+class AddDepartmentsFields extends Migration
 {
     /**
      * Run the migrations.
@@ -53,7 +53,7 @@ class AddTeamsFields extends Migration
                     'model_has_permissions_permission_model_type_primary');
                 if (DB::getDriverName() !== 'sqlite') {
                     $table->foreign(PermissionRegistrar::$pivotPermission)
-                        ->references('id')->on($tableNames['menus'])->onDelete('cascade');
+                        ->references('id')->on($tableNames['permission'])->onDelete('cascade');
                 }
             });
         }

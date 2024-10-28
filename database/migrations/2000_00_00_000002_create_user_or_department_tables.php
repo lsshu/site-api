@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Spatie\Permission\PermissionRegistrar;
 
-class CreateRootOrTeamTables extends Migration
+class CreateUserOrDepartmentTables extends Migration
 {
     /**
      * Run the migrations.
@@ -26,7 +26,7 @@ class CreateRootOrTeamTables extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
-        Schema::create($tableNames['roots'], function (Blueprint $table) use ($columnNames) {
+        Schema::create($tableNames['users'], function (Blueprint $table) use ($columnNames) {
             $table->bigIncrements('id'); // root id
             $table->unsignedBigInteger($columnNames['team_foreign_key'])->nullable();
             $table->index($columnNames['team_foreign_key'], 'roots_team_foreign_key_index');
@@ -50,6 +50,6 @@ class CreateRootOrTeamTables extends Migration
     {
         $tableNames = config('permission.table_names');
         Schema::drop($tableNames['departments']);
-        Schema::drop($tableNames['roots']);
+        Schema::drop($tableNames['users']);
     }
 }

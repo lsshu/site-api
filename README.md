@@ -16,7 +16,7 @@ composer require lsshu/site-api
 Then run these commands to publish assets and config：
 
 ```shell
-php artisan vendor:publish --provider="Lsshu\Site\Api\ServiceProvider --tag="config""
+php artisan vendor:publish --provider="Lsshu\Site\Api\ServiceProvider" --tag="config"
 ```
 
 After run command you can find config file in `config/permisstion.php` `config/jwt.php` `config/site-api.php`, in this
@@ -34,6 +34,12 @@ Add the following configuration to file `config/filesystems.php`
             'root' => '/'
         ]
     ]
+```
+
+migrate.
+
+```shell
+php artisan migrate
 ```
 
 At last run following command to finish install permission.
