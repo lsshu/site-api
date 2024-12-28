@@ -25,7 +25,7 @@ class MenuController extends Controller
         $menus = [];
         foreach ($data as $key => $datum) {
             $menus[$key] = [
-                "path" => "/" . str_replace('.', '/', $datum->name),
+                "path" => str_replace('.', '/', "." . $datum->name . ".index"),
                 "meta" => [
                     "icon" => $datum->icon,
                     "title" => $datum->title,

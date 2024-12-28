@@ -25,7 +25,7 @@ class SystemUser extends Authenticatable implements JWTSubject
      */
     public function isRoot()
     {
-        return $this->username === 'root';
+        return $this->username === config("site-api.root_username");
     }
 
     /***

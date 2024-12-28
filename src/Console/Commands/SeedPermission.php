@@ -60,18 +60,18 @@ class SeedPermission extends Command
                 foreach ($array as $arr) {
                     $arr['is_menu'] = $arr['is_menu'] ?? true;
                     $arr['is_action'] = $arr['is_action'] ?? true;
-                    $values[$arr['name']] = $arr;
+                    $values[$arr['path']] = $arr;
                     if (isset($arr['action']) && $arr['action']) {
-                        $values = array_merge($values, $this->action($arr['action'], $arr['name'], $arr['title'], !(isset($arr['children']) && $arr['children'])));
-                        unset($values[$arr['name']]['action']);
+                        $values = array_merge($values, $this->action($arr['action'], $arr['path'], $arr['title'], !(isset($arr['children']) && $arr['children'])));
+                        unset($values[$arr['path']]['action']);
                     }
                     if (isset($arr['children']) && $arr['children']) {
-                        $values = array_merge($values, $this->children($arr['children'], $arr['name']));
-                        unset($values[$arr['name']]['children']);
+                        $values = array_merge($values, $this->children($arr['children'], $arr['path']));
+                        unset($values[$arr['path']]['children']);
                     }
                 }
                 // 获取数据库中的权限
-                $permissions = SystemMenu::select('name')->where('guard_name', $guardName)->get()->pluck('name');
+                $permissions = SystemMenu::select('path')->where('guard_name', $guardName)->get()->pluck('path');
                 // 筛选出不同的权限
                 //$diff = collect(array_keys($values))->diff($permissions);
                 $diff = collect(array_keys($values));
@@ -79,17 +79,17 @@ class SeedPermission extends Command
                     $_item = $values[$item];
                     $_item['guard_name'] = isset($_item['guard_name']) ? $_item['guard_name'] : $guardName;
                     if (isset($_item['parent_name']) && $_item['parent_name']) {
-                        $p = SystemMenu::where(['name' => $_item['parent_name'], 'guard_name' => $_item['guard_name']])->first();
+                        $p = SystemMenu::where(['path' => $_item['parent_name'], 'guard_name' => $_item['guard_name']])->first();
                         if ($p) {
                             $_item['parent_id'] = $p->id;
                         }
                     }
-                    SystemMenu::updateOrCreate(['name' => $_item['name'], 'guard_name' => $_item['guard_name']], $_item);
+                    SystemMenu::updateOrCreate(['path' => $_item['path'], 'guard_name' => $_item['guard_name']], $_item);
                 }
                 // 反向删除
                 $diff2 = collect($permissions)->diff(array_keys($values));
                 foreach ($diff2 as $item) {
-                    SystemMenu::where(['name' => $item, 'guard_name' => $guardName])->delete();
+                    SystemMenu::where(['path' => $item, 'guard_name' => $guardName])->delete();
                 }
             }
         });
@@ -110,17 +110,17 @@ class SeedPermission extends Command
         foreach ($children as $child) {
             $child['is_menu'] = $child['is_menu'] ?? true;
             $child['is_action'] = $child['is_action'] ?? true;
-            $child['name'] = $parent_name . '.' . $child['name'];
+            $child['path'] = $parent_name . '.' . $child['path'];
             $child['parent_name'] = $parent_name;
-            $values[$child['name']] = $child;
+            $values[$child['path']] = $child;
 
-            $values = array_merge($values, $this->action(isset($child['action']) && is_array($child['action']) ? $child['action'] : [], $child['name'], $child['title']));
-            unset($values[$child['name']]['action']);
+            $values = array_merge($values, $this->action(isset($child['action']) && is_array($child['action']) ? $child['action'] : [], $child['path'], $child['title']));
+            unset($values[$child['path']]['action']);
 
 
             if (isset($child['children']) && $child['children']) {
-                $values = array_merge($values, $this->children($child['children'], $child['name']));
-                unset($values[$child['name']]['children']);
+                $values = array_merge($values, $this->children($child['children'], $child['path']));
+                unset($values[$child['path']]['children']);
             }
 
         }
@@ -138,21 +138,21 @@ class SeedPermission extends Command
     {
         $values = [];
         $action = [
-            ['name' => "index", 'title' => "列表"],
-            ['name' => "show", 'title' => "查看"],
-            ['name' => "store", 'title' => "添加"],
-            ['name' => "update", 'title' => "修改"],
-            ['name' => "destroy", 'title' => "删除"],
-            ['name' => "export", 'title' => "导出"]
+            ['path' => "index", 'title' => "列表"],
+            ['path' => "show", 'title' => "查看"],
+            ['path' => "store", 'title' => "添加"],
+            ['path' => "update", 'title' => "修改"],
+            ['path' => "destroy", 'title' => "删除"],
+            ['path' => "export", 'title' => "导出"]
         ];
         $children_action = $is_default_action ? array_merge($action, $children) : $children;
         foreach ($children_action as $child) {
             $child['is_menu'] = $child['is_menu'] ?? false;
             $child['is_action'] = $child['is_action'] ?? true;
-            $child['name'] = $parent_name . '.' . $child['name'];
+            $child['path'] = $parent_name . '.' . $child['path'];
             $child['title'] = $parent_title . ' ' . $child['title'];
             $child['parent_name'] = $parent_name;
-            $values[$child['name']] = $child;
+            $values[$child['path']] = $child;
         }
         return $values;
     }

@@ -2,28 +2,30 @@
 
 return [
     [
-        "name" => "system",
-        "title" => "系统管理",
-        "icon" => "",
-//        'action' => [['name' => "aaa", "title" => "AAA"]],
+        "path" => "system",
+        "title" => "menus.pureSysManagement",
+        "icon" => "ri:settings-3-line",
+//        "action" => [["name" => "aaa", "title" => "AAA"]],
         "children" => [
             [
-                'name' => 'user',
-                'title' => '用户管理',
-//                'action' => [['name' => "abc", "title" => "ABC"]]
+                "path" => "user",
+                "title" => "menus.pureUser",
+                "icon" => "ri:admin-line",
             ],
             [
-                'name' => 'role',
-                'title' => '角色管理',
-//                'action' => [['name' => "cde", "title" => "CDE"]]
+                "path" => "role",
+                "title" => "menus.pureRole",
+                "icon" => "ri:admin-fill",
             ],
             [
-                'name' => 'menu',
-                'title' => '菜单管理',
+                "path" => "menu",
+                "title" => "menus.pureSystemMenu",
+                "icon" => "ep:menu",
             ],
             [
-                'name' => 'dept',
-                'title' => '部门管理',
+                "path" => "dept",
+                "title" => "menus.pureDept",
+                "icon" => "ri:git-branch-line",
             ],
         ]
     ]

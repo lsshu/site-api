@@ -71,7 +71,7 @@ Add the following configuration to file `config/auth.php`
         ·
         'roots' => [
             'driver' => 'eloquent',
-            'model' => Lsshu\Site\Api\Models\Root::class,
+            'model' => Lsshu\Site\Api\Models\SystemUser::class,
         ],
     ],
 ```

@@ -28,8 +28,10 @@ class CreatePermissionTables extends Migration
         Schema::create($tableNames['permissions'], function (Blueprint $table) {
             $table->bigIncrements('id'); // permission id
             $table->unsignedBigInteger('parent_id')->nullable(); // parent id
-            $table->string('name');       // For MySQL 8.0 use string('name', 125);
-            $table->string('title')->nullable();       // For MySQL 8.0 use string('name', 125);
+            $table->string('name')->nullable();       // For MySQL 8.0 use string('name', 125);
+            $table->string('path');       // For MySQL 8.0 use string('path', 125);
+            $table->string('icon',32)->nullable();       // For MySQL 8.0 use string('icon', 32);
+            $table->string('title')->nullable();       // For MySQL 8.0 use string('title', 125);
             $table->string('guard_name'); // For MySQL 8.0 use string('guard_name', 125);
             $table->boolean('is_menu')->default(true);
             $table->boolean('is_action')->default(true);
