@@ -31,7 +31,7 @@ Add the following configuration to file `config/filesystems.php`
         ·
         'root' => [
             'driver' => 'local',
-            'root' => '/'
+            'root' => base_path('/')
         ]
     ]
 ```

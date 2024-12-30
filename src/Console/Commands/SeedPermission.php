@@ -41,7 +41,7 @@ class SeedPermission extends Command
     public function handle()
     {
         // 获取 zh-CN 语言包中的权限下所有文件
-        $dirname = __DIR__ . "/../../../permission/";
+        $dirname = 'vendor' . DIRECTORY_SEPARATOR . 'lsshu' . DIRECTORY_SEPARATOR . 'site-api' . DIRECTORY_SEPARATOR . 'permission';
         $files = Storage::disk('root')->files($dirname);
         try {
             is_null(!$files);
@@ -54,7 +54,7 @@ class SeedPermission extends Command
             foreach ($files as $file) {
                 // 获取守卫名称
                 $guardName = basename($file, '.php');
-                $array = include($dirname . $guardName . '.php');
+                $array = include($file);
                 $values = [];
 
                 foreach ($array as $arr) {
