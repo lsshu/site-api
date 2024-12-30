@@ -28,11 +28,11 @@ class CreatePermissionTables extends Migration
         Schema::create($tableNames['permissions'], function (Blueprint $table) {
             $table->bigIncrements('id'); // permission id
             $table->unsignedBigInteger('parent_id')->nullable(); // parent id
-            $table->string('name')->nullable();       // For MySQL 8.0 use string('name', 125);
-            $table->string('path');       // For MySQL 8.0 use string('path', 125);
-            $table->string('icon',32)->nullable();       // For MySQL 8.0 use string('icon', 32);
-            $table->string('title')->nullable();       // For MySQL 8.0 use string('title', 125);
-            $table->string('guard_name'); // For MySQL 8.0 use string('guard_name', 125);
+            $table->string('name', 125)->nullable();       // For MySQL 8.0 use string('name', 125);
+            $table->string('path', 125);       // For MySQL 8.0 use string('path', 125);
+            $table->string('icon', 32)->nullable();       // For MySQL 8.0 use string('icon', 32);
+            $table->string('title', 125)->nullable();       // For MySQL 8.0 use string('title', 125);
+            $table->string('guard_name', 125); // For MySQL 8.0 use string('guard_name', 125);
             $table->boolean('is_menu')->default(true);
             $table->boolean('is_action')->default(true);
             $table->timestamps();
@@ -47,8 +47,8 @@ class CreatePermissionTables extends Migration
                 $table->unsignedBigInteger($columnNames['team_foreign_key'])->nullable();
                 $table->index($columnNames['team_foreign_key'], 'roles_team_foreign_key_index');
             }
-            $table->string('name');       // For MySQL 8.0 use string('name', 125);
-            $table->string('guard_name'); // For MySQL 8.0 use string('guard_name', 125);
+            $table->string('name', 125);       // For MySQL 8.0 use string('name', 125);
+            $table->string('guard_name', 125); // For MySQL 8.0 use string('guard_name', 125);
             $table->timestamps();
             $table->softDeletes();
             if ($teams || config('permission.testing')) {
@@ -61,7 +61,7 @@ class CreatePermissionTables extends Migration
         Schema::create($tableNames['model_has_permissions'], function (Blueprint $table) use ($tableNames, $columnNames, $teams) {
             $table->unsignedBigInteger(PermissionRegistrar::$pivotPermission);
 
-            $table->string('model_type');
+            $table->string('model_type', 191);
             $table->unsignedBigInteger($columnNames['model_morph_key']);
             $table->index([$columnNames['model_morph_key'], 'model_type'], 'model_has_permissions_model_id_model_type_index');
 
@@ -85,7 +85,7 @@ class CreatePermissionTables extends Migration
         Schema::create($tableNames['model_has_roles'], function (Blueprint $table) use ($tableNames, $columnNames, $teams) {
             $table->unsignedBigInteger(PermissionRegistrar::$pivotRole);
 
-            $table->string('model_type');
+            $table->string('model_type', 191);
             $table->unsignedBigInteger($columnNames['model_morph_key']);
             $table->index([$columnNames['model_morph_key'], 'model_type'], 'model_has_roles_model_id_model_type_index');
 

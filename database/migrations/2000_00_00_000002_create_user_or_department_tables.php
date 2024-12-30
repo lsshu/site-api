@@ -20,8 +20,8 @@ class CreateUserOrDepartmentTables extends Migration
         Schema::create($tableNames['departments'], function (Blueprint $table) use ($columnNames) {
             $table->bigIncrements('id'); // role id
             $table->unsignedBigInteger('parent_id')->nullable(); // parent id
-            $table->string('name');       // For MySQL 8.0 use string('name', 125);
-            $table->string('guard_name'); // For MySQL 8.0 use string('guard_name', 125);
+            $table->string('name', 125);       // For MySQL 8.0 use string('name', 125);
+            $table->string('guard_name', 125); // For MySQL 8.0 use string('guard_name', 125);
             $table->unique(['name', 'guard_name', 'parent_id']);
             $table->timestamps();
             $table->softDeletes();
@@ -30,11 +30,11 @@ class CreateUserOrDepartmentTables extends Migration
             $table->bigIncrements('id'); // root id
             $table->unsignedBigInteger($columnNames['team_foreign_key'])->nullable();
             $table->index($columnNames['team_foreign_key'], 'roots_team_foreign_key_index');
-            $table->string('username');       // For MySQL 8.0 use string('name', 125);
-            $table->string('nickname')->nullable();       // For MySQL 8.0 use string('name', 125);
-            $table->string('avatar')->nullable();       // For MySQL 8.0 use string('name', 125);
-            $table->string('password');
-            $table->string('guard_name'); // For MySQL 8.0 use string('guard_name', 125);
+            $table->string('username', 125);       // For MySQL 8.0 use string('name', 125);
+            $table->string('nickname', 125)->nullable();       // For MySQL 8.0 use string('name', 125);
+            $table->string('avatar', 125)->nullable();       // For MySQL 8.0 use string('name', 125);
+            $table->string('password', 125);
+            $table->string('guard_name', 125); // For MySQL 8.0 use string('guard_name', 125);
             $table->unique(['username', 'guard_name']);
             $table->timestamps();
             $table->softDeletes();
