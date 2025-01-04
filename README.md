@@ -86,6 +86,17 @@ Configurations
 ------------
 The file `config/site-api.php` contains an array of configurations, you can find the default configurations in there.
 
+
+在 app/Http/Kernel.php 中找到 protected $routeMiddleware = [···]
+```php
+protected $routeMiddleware = [
+        .
+        .
+        .
+        // 检查权限
+        'check.permissions' => \Lsshu\Site\Api\Middleware\CheckPermissions::class
+    ];
+```
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

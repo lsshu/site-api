@@ -6,6 +6,7 @@ use Lsshu\Site\Api\Controllers\SiteApi\UserController;
 use Lsshu\Site\Api\Controllers\SiteApi\RoleController;
 use Lsshu\Site\Api\Controllers\SiteApi\MenuController;
 use Lsshu\Site\Api\Controllers\SiteApi\DepartmentController;
+use Lsshu\Site\Api\Controllers\SiteApi\TenantsController;
 
 Route::group([
     'prefix' => 'site-api'
@@ -50,5 +51,8 @@ Route::group([
         Route::resource('permissions', MenuController::class)->names("site-api.permissions");
         /*团队*/
         Route::resource('teams', DepartmentController::class)->names("site-api.teams");
+
+        /*商户*/
+        Route::resource('tenants', TenantsController::class)->names("site-api.tenants");
     });
 });

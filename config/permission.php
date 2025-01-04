@@ -121,6 +121,8 @@ return [
         'users' => 'site_api_system_users',
 
         'departments' => 'site_api_system_departments',
+        'tenant_packages' => 'site_api_system_tenant_packages', //租户套餐
+        'tenants' => 'site_api_system_tenants', //租户列表
 
     ],
 

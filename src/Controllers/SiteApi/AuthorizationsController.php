@@ -123,6 +123,7 @@ class AuthorizationsController extends Controller
                 'expiresIn' => $expiresIn,
                 'expires' => date("Y/m/d H:i:s", time() + $expiresIn),
                 'username' => $user->username,
+                'nickname' => ucwords($user->nickname),
                 'roles' => ['admin']
             ]])->setStatusCode(201);
     }

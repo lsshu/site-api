@@ -27,18 +27,34 @@ class CreatePermissionTables extends Migration
 
         Schema::create($tableNames['permissions'], function (Blueprint $table) {
             $table->bigIncrements('id'); // permission id
-            $table->unsignedBigInteger('parent_id')->nullable(); // parent id
-            $table->string('name', 125)->nullable();       // For MySQL 8.0 use string('name', 125);
-            $table->string('path', 125);       // For MySQL 8.0 use string('path', 125);
-            $table->string('icon', 32)->nullable();       // For MySQL 8.0 use string('icon', 32);
-            $table->string('title', 125)->nullable();       // For MySQL 8.0 use string('title', 125);
-            $table->string('guard_name', 125); // For MySQL 8.0 use string('guard_name', 125);
-            $table->boolean('is_menu')->default(true);
-            $table->boolean('is_action')->default(true);
+            $table->unsignedBigInteger('parentId')->nullable()->comment("上级菜单"); // parent id
+            $table->integer('menuType')->default(0)->comment("菜单类型");
+            $table->string('name', 125)->comment("路由名称");       // For MySQL 8.0 use string('name', 125);
+            $table->string('path', 125)->comment("路由路径");       // For MySQL 8.0 use string('path', 125);
+            $table->string('component', 125)->comment("组件路径");       // For MySQL 8.0 use string('path', 125);
+            $table->string('icon', 100)->nullable()->comment("菜单图标");       // For MySQL 8.0 use string('icon', 32);
+            $table->string('title', 125)->comment("菜单名称");       // For MySQL 8.0 use string('title', 125);
+            $table->integer('rank')->default(0)->comment("菜单排序");
+            $table->string('redirect', 125)->comment("路由重定向");
+            $table->string('extraIcon', 125)->comment("右侧图标");
+            $table->string('enterTransition', 125)->comment("进场动画");
+            $table->string('leaveTransition', 125)->comment("离场动画");
+            $table->string('activePath', 125)->comment("菜单激活");
+            $table->string('auths', 125)->comment("权限标识");
+            $table->string('frameSrc', 125)->comment("链接地址");
+            $table->boolean('frameLoading')->default(true)->comment("加载动画");
+            $table->boolean('keepAlive')->default(false)->comment("缓存页面");
+            $table->boolean('hiddenTag')->default(false)->comment("标签页");
+            $table->boolean('fixedTag')->default(false)->comment("固定标签页");
+            $table->boolean('showLink')->default(true)->comment("菜单");
+            $table->boolean('showParent')->default(false)->comment("父级菜单");
+            $table->string('guard_name', 80); // For MySQL 8.0 use string('guard_name', 125);
+//            $table->boolean('is_menu')->default(true);
+//            $table->boolean('is_action')->default(true);
             $table->timestamps();
             $table->softDeletes();
 
-            $table->unique(['name', 'guard_name', 'parent_id']);
+            $table->unique(['name', 'guard_name', 'parentId']);
         });
 
         Schema::create($tableNames['roles'], function (Blueprint $table) use ($teams, $columnNames) {
@@ -47,8 +63,11 @@ class CreatePermissionTables extends Migration
                 $table->unsignedBigInteger($columnNames['team_foreign_key'])->nullable();
                 $table->index($columnNames['team_foreign_key'], 'roles_team_foreign_key_index');
             }
-            $table->string('name', 125);       // For MySQL 8.0 use string('name', 125);
-            $table->string('guard_name', 125); // For MySQL 8.0 use string('guard_name', 125);
+            $table->string('name', 125)->comment("角色名称");       // For MySQL 8.0 use string('name', 125);
+            $table->string('code', 125)->nullable()->comment("角色标识");       // For MySQL 8.0 use string('name', 125);
+            $table->integer('status')->default('1')->comment("状态");
+            $table->string('remark', 191)->nullable()->comment("备注");
+            $table->string('guard_name', 80); // For MySQL 8.0 use string('guard_name', 125);
             $table->timestamps();
             $table->softDeletes();
             if ($teams || config('permission.testing')) {

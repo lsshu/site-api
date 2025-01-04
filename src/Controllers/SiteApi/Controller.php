@@ -21,7 +21,7 @@ class Controller extends BaseController
      */
     public function index()
     {
-        $data = $this->model::paginate();
+        $data = $this->getModel()::paginate();
         return new $this->modelCollectionResource($data);
     }
 
@@ -43,7 +43,7 @@ class Controller extends BaseController
     public function store(Request $request)
     {
         $data = $this->request($request);
-        $this->model::create($data);
+        $this->getModel()::create($data);
         return $this->response(null, 201, '请求成功！');
     }
 
@@ -55,7 +55,7 @@ class Controller extends BaseController
      */
     public function show($id)
     {
-        $object = $this->model::findOrFail($id);
+        $object = $this->getModel()::findOrFail($id);
         return new $this->modelResource($object);
     }
 
@@ -79,7 +79,7 @@ class Controller extends BaseController
     public function update(Request $request, $id)
     {
         $data = $this->request($request);
-        $this->model::where("id", $id)->update($data);
+        $this->getModel()::where("id", $id)->update($data);
         return $this->response(null, 200, '请求成功！');
     }
 
@@ -90,7 +90,7 @@ class Controller extends BaseController
      */
     public function destroy($id)
     {
-        $this->model::where("id", $id)->delete();
+        $this->getModel()::where("id", $id)->delete();
         return $this->response(null, 200, '请求成功！');
     }
 
@@ -137,5 +137,10 @@ class Controller extends BaseController
             'message' => $message,
             'data' => $data
         ], $statusCode, ['X-Site-Api' => true]);
+    }
+
+    protected function getModel()
+    {
+        return $this->model;
     }
 }
