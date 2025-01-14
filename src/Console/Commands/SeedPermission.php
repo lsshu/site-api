@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Lsshu\Site\Api\Models\SystemMenu;
+use Lsshu\Site\Api\Models\SystemUser;
 
 class SeedPermission extends Command
 {
@@ -93,7 +94,7 @@ class SeedPermission extends Command
                 }
             }
         });
-
+        (new SystemUser())->initRootUser();
         $this->info('权限已更新');
         return Command::SUCCESS;
     }

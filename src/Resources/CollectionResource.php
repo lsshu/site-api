@@ -3,6 +3,7 @@
 namespace Lsshu\Site\Api\Resources;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Support\Arr;
 
 class CollectionResource extends ResourceCollection
 {
@@ -14,6 +15,14 @@ class CollectionResource extends ResourceCollection
      */
     public function toArray($request)
     {
+        $paginated = $this->resource->toArray();
+
+        return [
+            'list' => parent::toArray($request),
+            'total'=>$paginated['total'],
+            'pageSize'=>intval($paginated['per_page']),
+            'currentPage'=>$paginated['current_page'],
+        ];
         return parent::toArray($request);
     }
     /**
@@ -36,4 +45,43 @@ class CollectionResource extends ResourceCollection
             'message' => "请求成功",
         ];
     }
+
+    public function paginationInformation($request, $paginated, $default){
+        return [];
+    }
+
+
+    /**
+     * Get the pagination links for the response.
+     *
+     * @param  array  $paginated
+     * @return array
+     */
+    protected function paginationLinks($paginated)
+    {
+        return [
+            'first' => $paginated['first_page_url'] ?? null,
+            'last' => $paginated['last_page_url'] ?? null,
+            'prev' => $paginated['prev_page_url'] ?? null,
+            'next' => $paginated['next_page_url'] ?? null,
+        ];
+    }
+
+    /**
+     * Gather the meta data for the response.
+     *
+     * @param  array  $paginated
+     * @return array
+     */
+    protected function meta($paginated)
+    {
+        return Arr::except($paginated, [
+            'data',
+            'first_page_url',
+            'last_page_url',
+            'prev_page_url',
+            'next_page_url',
+        ]);
+    }
+
 }

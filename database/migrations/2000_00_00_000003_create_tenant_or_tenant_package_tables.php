@@ -31,7 +31,7 @@ class CreateTenantOrTenantPackageTables extends Migration
         Schema::create($tableNames['tenants'], function (Blueprint $table) use ($columnNames) {
             $table->bigIncrements('id');
             $table->string('name', 125)->comment("租户名");       // For MySQL 8.0 use string('name', 125);
-            $table->string('packageName', 125)->comment("租户套餐");       // For MySQL 8.0 use string('name', 125);
+            $table->bigInteger('packageId')->comment("租户套餐");
             $table->string('contactName', 100)->comment("联系人");       // For MySQL 8.0 use string('name', 125);
             $table->string('contactMobile', 44)->comment("联系电话");       // For MySQL 8.0 use string('name', 125);
             $table->integer('accountCount')->default(0)->comment("账号额度");

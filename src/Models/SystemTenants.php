@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class SystemTenants extends Model
 {
     use SoftDeletes;
+    protected $fillable=["name","packageId","contactName","contactMobile","accountCount","expireTime","website","remark","status","guard_name"];
 
     public function getTable()
     {

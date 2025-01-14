@@ -25,6 +25,9 @@ class AuthorizationsController extends Controller
             return $this->errorResponse(401, '用户名或密码错误', 1001);
         }
         return $this->respondWithToken($token, $credentials['username']);
+//        $ttl = 720; // 2小时
+//        $payload = JWTFactory::sub(auth()->user()->id)->aud(auth()->payload()->get('sub'))->ttl($ttl);
+//        $token = JWTAuth::encode($payload);
     }
 
     /**

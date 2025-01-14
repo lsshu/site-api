@@ -3,15 +3,37 @@
 namespace Lsshu\Site\Api\Controllers\SiteApi;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Lsshu\Site\Api\Resources\CollectionResource;
 use Lsshu\Site\Api\Resources\ModelResource;
+use mysql_xdevapi\Exception;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use App\Http\Controllers\Controller as BaseController;
 
 class Controller extends BaseController
 {
+    /***
+     * @var string Model::class
+     */
     protected string $model = Model::class;
+    /***
+     * 过滤条件
+     * "name" => "=",
+     * "name" => ["like", "%{}%"]
+     * @var array
+     */
+    protected array $FilterConditions = [];
+    /***
+     * 忽视 过滤的字段
+     * @var array|string[]
+     */
+    protected array $IgnoreFilterConditions = ["page", "pageSize", "currentPage"];
+    /***
+     * 信任的 过滤字段
+     * @var array
+     */
+    protected array $TrustFilterConditions = [];
     protected string|ModelResource $modelResource = ModelResource::class;
     protected string|CollectionResource $modelCollectionResource = CollectionResource::class;
 
@@ -19,9 +41,11 @@ class Controller extends BaseController
      * Display a listing of the resource.
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = $this->getModel()::paginate();
+        $pageSize = $request->get("pageSize",15);
+        $where = $this->getFilterConditions($request);
+        $data = $this->getModel()::where($where)->paginate($pageSize);
         return new $this->modelCollectionResource($data);
     }
 
@@ -43,7 +67,15 @@ class Controller extends BaseController
     public function store(Request $request)
     {
         $data = $this->request($request);
-        $this->getModel()::create($data);
+        DB::beginTransaction();
+        try {
+            $data['guard_name'] = $data['guard_name'] ?? config('site-api.root_guard_name', "site-api");
+            $this->getModel()::create($data);
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            return $this->errorResponse($e->getMessage());
+        }
         return $this->response(null, 201, '请求成功！');
     }
 
@@ -79,7 +111,15 @@ class Controller extends BaseController
     public function update(Request $request, $id)
     {
         $data = $this->request($request);
-        $this->getModel()::where("id", $id)->update($data);
+        $row = $this->getModel()::find($id);
+        DB::beginTransaction();
+        try {
+            $row->fill($data)->save();
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            return $this->errorResponse($e->getMessage());
+        }
         return $this->response(null, 200, '请求成功！');
     }
 
@@ -90,7 +130,14 @@ class Controller extends BaseController
      */
     public function destroy($id)
     {
-        $this->getModel()::where("id", $id)->delete();
+        DB::beginTransaction();
+        try {
+            $this->getModel()::where("id", $id)->delete();
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            return $this->errorResponse($e->getMessage());
+        }
         return $this->response(null, 200, '请求成功！');
     }
 
@@ -104,7 +151,7 @@ class Controller extends BaseController
         if ($request->hasHeader('X-Site-Api') && $request->accepts(['application/json'])) {
             return $this->input($request);
         }
-        return $this->errorResponse(401, "");
+        return $this->errorResponse("检查请求的数据", 203);
     }
 
     /***
@@ -117,7 +164,7 @@ class Controller extends BaseController
         return $request->all();
     }
 
-    protected function errorResponse($statusCode, $message = null, $code = 0)
+    protected function errorResponse($message = null, $statusCode = 202, $code = 0)
     {
         throw new HttpException($statusCode, $message, null, [], $code);
     }
@@ -142,5 +189,33 @@ class Controller extends BaseController
     protected function getModel()
     {
         return $this->model;
+    }
+
+
+    /***
+     * 获取列表筛选条件
+     * @param Request $request
+     * @return array
+     */
+    public function getFilterConditions(Request $request)
+    {
+        $params = $this->input($request);
+        $where = [];
+        foreach ($params as $key => $param) {
+            if(!$this->TrustFilterConditions || in_array($key,$this->TrustFilterConditions)){
+                if (!in_array($key, $this->IgnoreFilterConditions)) { // ignore 不要的
+                    if ($param) {
+                        $conditions = $this->FilterConditions[$key] ?? "=";
+                        if (is_array($conditions)) { // 当是like 类型时
+                            $param = str_replace("{}", $param, $conditions[1] ?? "");
+                            $conditions = $conditions[0] ?? "=";
+                        }
+                        $param = $param === "null" ? null : $param;
+                        $where[] = [$key, $conditions, $param];
+                    }
+                }
+            }
+        }
+        return $where;
     }
 }
