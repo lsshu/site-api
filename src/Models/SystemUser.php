@@ -11,7 +11,7 @@ class SystemUser extends Authenticatable implements JWTSubject
 {
     use HasRoles, SoftDeletes;
 
-    protected $fillable = ['team_id', 'username', 'nickname', 'avatar', 'password', 'guard_name'];
+    protected $fillable = ['deptId', 'username', 'nickname', 'avatar', 'password', 'guard_name'];
 
     public function getTable()
     {

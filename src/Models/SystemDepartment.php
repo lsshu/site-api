@@ -2,12 +2,11 @@
 
 namespace Lsshu\Site\Api\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class SystemDepartment extends Model
+class SystemDepartment extends SystemModel
 {
-    use SoftDeletes;
+    protected $fillable = ["parentId", "name", "principal", "phone", "email", "remark", "sort", "status", "guard_name"];
 
     public function getTable()
     {

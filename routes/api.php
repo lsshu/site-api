@@ -7,6 +7,7 @@ use Lsshu\Site\Api\Controllers\SiteApi\RoleController;
 use Lsshu\Site\Api\Controllers\SiteApi\MenuController;
 use Lsshu\Site\Api\Controllers\SiteApi\DepartmentController;
 use Lsshu\Site\Api\Controllers\SiteApi\TenantsController;
+use Lsshu\Site\Api\Controllers\SiteApi\TenantPackagesController;
 
 Route::group([
     'prefix' => 'site-api'
@@ -44,15 +45,17 @@ Route::group([
         'middleware' => ['auth:site-api', 'check.permissions'],// 此处认证的是 api 守卫
     ], function () {
         /*管理员*/
-        Route::resource('roots', UserController::class)->names("site-api.roots");
+        Route::resource('users', UserController::class)->names("site-api.users");
         /*角色*/
         Route::resource('roles', RoleController::class)->names("site-api.roles");
         /*权限*/
         Route::resource('permissions', MenuController::class)->names("site-api.permissions");
         /*团队*/
-        Route::resource('teams', DepartmentController::class)->names("site-api.teams");
+        Route::resource('departments', DepartmentController::class)->names("site-api.departments");
 
         /*商户*/
         Route::resource('tenants', TenantsController::class)->names("site-api.tenants");
+        /*商户套餐*/
+        Route::resource('tenant/packages', TenantPackagesController::class)->names("site-api.tenants");
     });
 });

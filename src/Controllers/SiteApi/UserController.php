@@ -3,11 +3,11 @@
 namespace Lsshu\Site\Api\Controllers\SiteApi;
 
 use Illuminate\Http\Request;
-use Lsshu\Site\Api\Models\Root;
+use Lsshu\Site\Api\Models\SystemUser;
 
 class UserController extends Controller
 {
-    protected string $model = Root::class;
+    protected string $model = SystemUser::class;
 
     /***
      * 处理提交的数据 处理密码
@@ -16,7 +16,7 @@ class UserController extends Controller
      */
     public function input(Request $request)
     {
-        $data = $request->only(['team_id', 'name', 'password', 'guard_name']);
+        $data =  $request->all();
         if (isset($data['password']) && $data['password']) {
             $data['password'] = bcrypt($data['password']);
         } else {

@@ -34,6 +34,11 @@ class Controller extends BaseController
      * @var array
      */
     protected array $TrustFilterConditions = [];
+    /***
+     * 列表with
+     * @var array
+     */
+    protected array $IndexWith = [];
     protected string|ModelResource $modelResource = ModelResource::class;
     protected string|CollectionResource $modelCollectionResource = CollectionResource::class;
 
@@ -43,9 +48,14 @@ class Controller extends BaseController
      */
     public function index(Request $request)
     {
-        $pageSize = $request->get("pageSize",15);
+        $pageSize = $request->get("pageSize", 15);
+        $sort = $request->get("sort", "id desc");
+        $order = explode(" ",$sort);
         $where = $this->getFilterConditions($request);
-        $data = $this->getModel()::where($where)->paginate($pageSize);
+        $data = $this->getModel()::where($where)
+            ->with($this->IndexWith)
+            ->orderBy($order[0],$order[1])
+            ->paginate($pageSize);
         return new $this->modelCollectionResource($data);
     }
 
@@ -202,9 +212,9 @@ class Controller extends BaseController
         $params = $this->input($request);
         $where = [];
         foreach ($params as $key => $param) {
-            if(!$this->TrustFilterConditions || in_array($key,$this->TrustFilterConditions)){
+            if (!$this->TrustFilterConditions || in_array($key, $this->TrustFilterConditions)) {
                 if (!in_array($key, $this->IgnoreFilterConditions)) { // ignore 不要的
-                    if ($param) {
+                    if ($param !== "" && $param !== null) {
                         $conditions = $this->FilterConditions[$key] ?? "=";
                         if (is_array($conditions)) { // 当是like 类型时
                             $param = str_replace("{}", $param, $conditions[1] ?? "");
