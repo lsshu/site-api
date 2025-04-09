@@ -17,8 +17,7 @@ class CreateGuardTable extends Migration
         Schema::create($tableNames['guards'], function (Blueprint $table) use ($tableNames) {
             $table->engine = 'InnoDB';
             $table->id();
-            $table->string('guard_name', 80);
-            $table->unique('guard_name');
+            $table->string('guard_name', 80)->unique();
             $table->timestamps();
             $table->softDeletes();
         });
