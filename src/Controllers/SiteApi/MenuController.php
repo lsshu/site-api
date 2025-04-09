@@ -5,7 +5,7 @@ namespace Lsshu\Site\Api\Controllers\SiteApi;
 use Illuminate\Http\Request;
 use Lsshu\Site\Api\Models\SystemMenu;
 
-class MenuController extends Controller
+class MenuController extends SiteApiController
 {
     protected string $model = SystemMenu::class;
 

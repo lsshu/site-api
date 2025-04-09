@@ -5,7 +5,7 @@ namespace Lsshu\Site\Api\Controllers\SiteApi;
 use Illuminate\Http\Request;
 use Lsshu\Site\Api\Models\SystemUser;
 
-class UserController extends Controller
+class UserController extends SiteApiController
 {
     protected string $model = SystemUser::class;
 

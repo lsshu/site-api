@@ -5,7 +5,7 @@ namespace Lsshu\Site\Api\Controllers\SiteApi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class AuthorizationsController extends Controller
+class AuthorizationsController extends SiteApiController
 {
     protected string $guard_name = "site-api";
 
