@@ -119,6 +119,7 @@ return [
         'role_has_permissions' => 'site_api_system_role_has_permissions',
 
         'users' => 'site_api_system_users',
+        'guards' => 'site_api_system_guards',
 
         'departments' => 'site_api_system_departments',
         'tenant_packages' => 'site_api_system_tenant_packages', //租户套餐

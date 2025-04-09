@@ -26,6 +26,7 @@ class CreatePermissionTables extends Migration
         }
 
         Schema::create($tableNames['permissions'], function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->bigIncrements('id'); // permission id
             $table->unsignedBigInteger('parentId')->nullable()->comment("上级菜单"); // parent id
             $table->integer('menuType')->default(0)->comment("菜单类型");
@@ -48,17 +49,16 @@ class CreatePermissionTables extends Migration
             $table->boolean('fixedTag')->default(false)->comment("固定标签页");
             $table->boolean('showLink')->default(true)->comment("菜单");
             $table->boolean('showParent')->default(false)->comment("父级菜单");
-//            $table->string('guard_name', 80); // For MySQL 8.0 use string('guard_name', 125);
-            $table->foreign('guard_name',80)->references('guard_name')->on('guard')->onUpdate('cascade')->onDelete('cascade');
 //            $table->boolean('is_menu')->default(true);
 //            $table->boolean('is_action')->default(true);
             $table->timestamps();
             $table->softDeletes();
 
-            $table->unique(['name', 'guard_name', 'parentId']);
+            $table->unique(['name', 'parentId']);
         });
 
-        Schema::create($tableNames['roles'], function (Blueprint $table) use ($teams, $columnNames) {
+        Schema::create($tableNames['roles'], function (Blueprint $table) use ($teams, $columnNames, $tableNames) {
+            $table->engine = 'InnoDB';
             $table->bigIncrements('id'); // role id
             if ($teams || config('permission.testing')) { // permission.testing is a fix for sqlite testing
                 $table->unsignedBigInteger($columnNames['team_foreign_key'])->nullable();
@@ -68,7 +68,9 @@ class CreatePermissionTables extends Migration
             $table->string('code', 125)->nullable()->comment("角色标识");       // For MySQL 8.0 use string('name', 125);
             $table->integer('status')->default('1')->comment("状态");
             $table->string('remark', 191)->nullable()->comment("备注");
-            $table->string('guard_name', 80); // For MySQL 8.0 use string('guard_name', 125);
+            $table->string('guard_name', 80);
+//            $table->index('guard_name');
+            $table->foreign('guard_name')->references('guard_name')->on($tableNames['guards'])->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
             if ($teams || config('permission.testing')) {
@@ -79,6 +81,7 @@ class CreatePermissionTables extends Migration
         });
 
         Schema::create($tableNames['model_has_permissions'], function (Blueprint $table) use ($tableNames, $columnNames, $teams) {
+            $table->engine = 'InnoDB';
             $table->unsignedBigInteger(PermissionRegistrar::$pivotPermission);
 
             $table->string('model_type', 191);
@@ -103,6 +106,7 @@ class CreatePermissionTables extends Migration
         });
 
         Schema::create($tableNames['model_has_roles'], function (Blueprint $table) use ($tableNames, $columnNames, $teams) {
+            $table->engine = 'InnoDB';
             $table->unsignedBigInteger(PermissionRegistrar::$pivotRole);
 
             $table->string('model_type', 191);
@@ -126,6 +130,7 @@ class CreatePermissionTables extends Migration
         });
 
         Schema::create($tableNames['role_has_permissions'], function (Blueprint $table) use ($tableNames) {
+            $table->engine = 'InnoDB';
             $table->unsignedBigInteger(PermissionRegistrar::$pivotPermission);
             $table->unsignedBigInteger(PermissionRegistrar::$pivotRole);
 

@@ -13,9 +13,12 @@ class CreateGuardTable extends Migration
      */
     public function up()
     {
-        Schema::create('guard', function (Blueprint $table) {
+        $tableNames = config('permission.table_names');
+        Schema::create($tableNames['guards'], function (Blueprint $table) use ($tableNames) {
+            $table->engine = 'InnoDB';
             $table->id();
-            $table->unique('guard_name', 80); // For MySQL 8.0 use string('guard_name', 125);
+            $table->string('guard_name', 80);
+            $table->unique('guard_name');
             $table->timestamps();
             $table->softDeletes();
         });

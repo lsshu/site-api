@@ -17,7 +17,8 @@ class CreateUserOrDepartmentTables extends Migration
         $tableNames = config('permission.table_names');
         $columnNames = config('permission.column_names');
 
-        Schema::create($tableNames['departments'], function (Blueprint $table) use ($columnNames) {
+        Schema::create($tableNames['departments'], function (Blueprint $table) use ($columnNames, $tableNames) {
+            $table->engine = 'InnoDB';
             $table->bigIncrements('id'); // role id
             $table->unsignedBigInteger('parentId')->nullable()->comment("上级部门"); // parent id
             $table->string('name', 125)->comment("部门名称");       // For MySQL 8.0 use string('name', 125);
@@ -27,13 +28,14 @@ class CreateUserOrDepartmentTables extends Migration
             $table->string('remark', 191)->nullable()->comment("备注");
             $table->integer('sort')->comment("排序");
             $table->integer('status')->default('1')->comment("状态");
-            $table->foreign('guard_name',80)->references('guard_name')->on('guard')->onUpdate('cascade')->onDelete('cascade');
-//            $table->string('guard_name', 80); // For MySQL 8.0 use string('guard_name', 125);
+            $table->string('guard_name', 80);
+            $table->foreign('guard_name')->references('guard_name')->on($tableNames['guards'])->onUpdate('cascade')->onDelete('cascade');
             $table->unique(['name', 'guard_name', 'parentId']);
             $table->timestamps();
             $table->softDeletes();
         });
-        Schema::create($tableNames['users'], function (Blueprint $table) use ($columnNames) {
+        Schema::create($tableNames['users'], function (Blueprint $table) use ($columnNames, $tableNames) {
+            $table->engine = 'InnoDB';
             $table->bigIncrements('id'); // root id
             $table->unsignedBigInteger($columnNames['team_foreign_key'])->nullable();
             $table->index($columnNames['team_foreign_key']);
@@ -47,8 +49,8 @@ class CreateUserOrDepartmentTables extends Migration
             $table->unsignedBigInteger('deptId')->nullable()->comment("归属部门"); // parent id
             $table->string('password', 125);
             $table->integer('status')->default('1')->comment("状态");
-//            $table->string('guard_name', 125); // For MySQL 8.0 use string('guard_name', 125);
-            $table->foreign('guard_name',80)->references('guard_name')->on('guard')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('guard_name', 80);
+            $table->foreign('guard_name')->references('guard_name')->on($tableNames['guards'])->onUpdate('cascade')->onDelete('cascade');
             $table->unique(['username', 'guard_name']);
             $table->timestamps();
             $table->softDeletes();
