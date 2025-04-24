@@ -23,9 +23,9 @@ class CreateTenantOrTenantPackageTables extends Migration
             $table->string('name', 125)->comment("套餐名称");
             $table->string('remark', 191)->nullable()->comment("备注");
             $table->integer('status')->default('1')->comment("状态");
-            $table->string('guard_name', 80);
-            $table->foreign('guard_name')->references('guard_name')->on($tableNames['guards'])->onUpdate('cascade')->onDelete('cascade');
-            $table->unique(['name', 'guard_name']);
+//            $table->string('guard_name', 80);
+//            $table->foreign('guard_name')->references('guard_name')->on($tableNames['guards'])->onUpdate('cascade')->onDelete('cascade');
+            $table->unique(['name']);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -43,9 +43,9 @@ class CreateTenantOrTenantPackageTables extends Migration
             $table->string('website', 191)->comment("绑定域名");
             $table->string('remark', 191)->nullable()->comment("备注");
             $table->integer('status')->default('1')->comment("状态");
-            $table->string('guard_name', 80);
-            $table->foreign('guard_name')->references('guard_name')->on($tableNames['guards'])->onUpdate('cascade')->onDelete('cascade');
-            $table->unique(['name', 'guard_name']);
+//            $table->string('guard_name', 80);
+//            $table->foreign('guard_name')->references('guard_name')->on($tableNames['guards'])->onUpdate('cascade')->onDelete('cascade');
+            $table->unique(['name']);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -60,7 +60,7 @@ class CreateTenantOrTenantPackageTables extends Migration
     public function down()
     {
         $tableNames = config('permission.table_names');
-        Schema::drop($tableNames['departments']);
-        Schema::drop($tableNames['users']);
+        Schema::drop($tableNames['tenant_packages']);
+        Schema::drop($tableNames['tenants']);
     }
 }

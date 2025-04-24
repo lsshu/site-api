@@ -28,9 +28,9 @@ class CreateUserOrDepartmentTables extends Migration
             $table->string('remark', 191)->nullable()->comment("备注");
             $table->integer('sort')->comment("排序");
             $table->integer('status')->default('1')->comment("状态");
-            $table->string('guard_name', 80);
-            $table->foreign('guard_name')->references('guard_name')->on($tableNames['guards'])->onUpdate('cascade')->onDelete('cascade');
-            $table->unique(['name', 'guard_name', 'parentId']);
+//            $table->string('guard_name', 80);
+//            $table->foreign('guard_name')->references('guard_name')->on($tableNames['guards'])->onUpdate('cascade')->onDelete('cascade');
+            $table->unique(['name', 'parentId']);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -49,9 +49,9 @@ class CreateUserOrDepartmentTables extends Migration
             $table->unsignedBigInteger('deptId')->nullable()->comment("归属部门"); // parent id
             $table->string('password', 125);
             $table->integer('status')->default('1')->comment("状态");
-            $table->string('guard_name', 80);
-            $table->foreign('guard_name')->references('guard_name')->on($tableNames['guards'])->onUpdate('cascade')->onDelete('cascade');
-            $table->unique(['username', 'guard_name']);
+//            $table->string('guard_name', 80);
+//            $table->foreign('guard_name')->references('guard_name')->on($tableNames['guards'])->onUpdate('cascade')->onDelete('cascade');
+            $table->unique(['username']);
             $table->timestamps();
             $table->softDeletes();
         });

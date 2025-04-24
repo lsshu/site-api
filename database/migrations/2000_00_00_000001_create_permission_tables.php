@@ -32,17 +32,17 @@ class CreatePermissionTables extends Migration
             $table->integer('menuType')->default(0)->comment("菜单类型");
             $table->string('name', 125)->comment("路由名称");       // For MySQL 8.0 use string('name', 125);
             $table->string('path', 125)->comment("路由路径");       // For MySQL 8.0 use string('path', 125);
-            $table->string('component', 125)->comment("组件路径");       // For MySQL 8.0 use string('path', 125);
+            $table->string('component', 125)->nullable()->comment("组件路径");       // For MySQL 8.0 use string('path', 125);
             $table->string('icon', 100)->nullable()->comment("菜单图标");       // For MySQL 8.0 use string('icon', 32);
             $table->string('title', 125)->comment("菜单名称");       // For MySQL 8.0 use string('title', 125);
             $table->integer('rank')->default(0)->comment("菜单排序");
-            $table->string('redirect', 125)->comment("路由重定向");
-            $table->string('extraIcon', 125)->comment("右侧图标");
-            $table->string('enterTransition', 125)->comment("进场动画");
-            $table->string('leaveTransition', 125)->comment("离场动画");
-            $table->string('activePath', 125)->comment("菜单激活");
-            $table->string('auths', 125)->comment("权限标识");
-            $table->string('frameSrc', 125)->comment("链接地址");
+            $table->string('redirect', 125)->nullable()->comment("路由重定向");
+            $table->string('extraIcon', 125)->nullable()->comment("右侧图标");
+            $table->string('enterTransition', 125)->nullable()->comment("进场动画");
+            $table->string('leaveTransition', 125)->nullable()->comment("离场动画");
+            $table->string('activePath', 125)->nullable()->comment("菜单激活");
+            $table->string('auths', 125)->nullable()->comment("权限标识");
+            $table->string('frameSrc', 125)->nullable()->comment("链接地址");
             $table->boolean('frameLoading')->default(true)->comment("加载动画");
             $table->boolean('keepAlive')->default(false)->comment("缓存页面");
             $table->boolean('hiddenTag')->default(false)->comment("标签页");
@@ -68,15 +68,14 @@ class CreatePermissionTables extends Migration
             $table->string('code', 125)->nullable()->comment("角色标识");       // For MySQL 8.0 use string('name', 125);
             $table->integer('status')->default('1')->comment("状态");
             $table->string('remark', 191)->nullable()->comment("备注");
-            $table->string('guard_name', 80);
-//            $table->index('guard_name');
-            $table->foreign('guard_name')->references('guard_name')->on($tableNames['guards'])->onUpdate('cascade')->onDelete('cascade');
+//            $table->string('guard_name', 80);
+//            $table->foreign('guard_name')->references('guard_name')->on($tableNames['guards'])->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
             if ($teams || config('permission.testing')) {
-                $table->unique([$columnNames['team_foreign_key'], 'name', 'guard_name']);
+                $table->unique([$columnNames['team_foreign_key'], 'name']);
             } else {
-                $table->unique(['name', 'guard_name']);
+                $table->unique(['name']);
             }
         });
 

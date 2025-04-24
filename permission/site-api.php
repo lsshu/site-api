@@ -3,12 +3,14 @@
 return [
     [
         "path" => "system",
+//        "name" => "System",
         "title" => "menus.pureSysManagement",
         "icon" => "ri:settings-3-line",
 //        "action" => [["name" => "aaa", "title" => "AAA"]],
         "children" => [
             [
                 "path" => "user",
+//                "name" => "User",
                 "title" => "menus.pureUser",
                 "icon" => "ri:admin-line",
             ],

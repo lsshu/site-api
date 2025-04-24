@@ -9,7 +9,8 @@ class SystemMenu extends SpatiePermission
 {
     use SoftDeletes;
 
-    protected $fillable = ['parent_id', 'name', 'path', 'title', 'icon', 'is_menu', 'is_action', 'guard_name'];
+    protected $fillable = ['parentId', 'menuType', 'name', 'path', 'component', 'icon', 'title', 'rank','redirect','extraIcon','enterTransition','leaveTransition','activePath','auths','frameSrc','frameLoading','keepAlive','hiddenTag','fixedTag','showLink','showParent'];
+//    protected $fillable = ['parent_id', 'name', 'path', 'title', 'icon', 'is_menu', 'is_action', 'guard_name'];
 
     // 模型文件
     public function children()

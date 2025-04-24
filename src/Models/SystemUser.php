@@ -47,7 +47,7 @@ class SystemUser extends Authenticatable implements JWTSubject
         $root_username = config('site-api.root_username', "root");
         $root_nickname = config('site-api.root_nickname', "Root");
         $root_password = config('site-api.root_password', "root123456");
-        $root_guard_name = config('site-api.root_guard_name', "site-api");
+//        $root_guard_name = config('site-api.root_guard_name', "site-api");
         $user = $this->where('username', $root_username)->first();
 //        if ($user) {
 //            $user->nickname = $root_nickname;
@@ -69,7 +69,7 @@ class SystemUser extends Authenticatable implements JWTSubject
             "username" => $root_username,
             "nickname" => $root_nickname,
             "password" => bcrypt($root_password),
-            "guard_name" => $root_guard_name,
+//            "guard_name" => $root_guard_name,
         ]);
     }
 
