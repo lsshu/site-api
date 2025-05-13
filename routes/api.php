@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Lsshu\Site\Api\Controllers\SiteApi\AuthorizationsController;
+use Lsshu\Site\Api\Controllers\SiteApi\MiniProgramController;
 use Lsshu\Site\Api\Controllers\SiteApi\UserController;
 use Lsshu\Site\Api\Controllers\SiteApi\RoleController;
 use Lsshu\Site\Api\Controllers\SiteApi\MenuController;
@@ -57,5 +58,19 @@ Route::group([
         Route::resource('tenants', TenantsController::class)->names("site-api.tenants");
         /*商户套餐*/
         Route::resource('tenant/packages', TenantPackagesController::class)->names("site-api.tenants");
+    });
+
+    // 微信小程序
+    Route::group([
+        'prefix' => 'program'
+    ], function () {
+        // 微信小程序登录 获取openid
+        Route::post('user_login', [MiniProgramController::class, "user_login"])->name('site-api.program.user_login');
+        // 解密微信用户手机号
+        Route::post('user_phone_number', [MiniProgramController::class, "user_phone_number"])->name('site-api.program.user_phone_number');
+        // 获取微信用户手机号
+        Route::post('get_user_phone_number', [MiniProgramController::class, "get_user_phone_number"])->name('site-api.program.get_user_phone_number');
+        // 解密微信用户信息
+        Route::post('user_info', [MiniProgramController::class, "user_info"])->name('site-api.program.user_info');
     });
 });
